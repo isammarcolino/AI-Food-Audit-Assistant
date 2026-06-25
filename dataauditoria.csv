@@ -1,0 +1,11 @@
+Data,Setor,Auditor,Item auditado,Categoria,Resultado,Conforme,Observação,Ação corretiva,Responsável,Prazo
+2025-01-05,Produção,Maria Silva,Calibração de balança,Controle de Processo,Fora de calibração,Não,"Balança sem selo de verificação",Recalibrar e documentar,Manutenção,2025-01-10
+2025-01-06,Armazenamento,João Santos,Controle de temperatura,Armazenamento,Temperatura acima do limite,Não,"Sensor com falha",Substituir sensor,Elétrica,2025-01-08
+2025-01-07,Expedição,Ana Costa,Etiquetagem de lote,Rastreabilidade,Lote não identificado,Não,"Caixa sem etiqueta",Reetiquetar e treinar operador,Supervisão,2025-01-09
+2025-01-08,Produção,Maria Silva,Limpeza de tanque,Higiene,Resíduos visíveis,Não,"Limpeza incompleta",Reprocesar limpeza,Operador,2025-01-08
+2025-01-09,Embalagem,Carlos Pereira,Integridade do invólucro,Embalagem,Furo no plástico,Não,"Danificado durante transporte",Substituir embalagem,Qualidade,2025-01-10
+2025-01-10,Produção,Maria Silva,Calibração de balança,Controle de Processo,Calibrada,Sim,"Verificada com sucesso",Nenhuma,Nenhuma,
+2025-01-11,Armazenamento,João Santos,Controle de temperatura,Armazenamento,Dentro do limite,Sim,"OK",Nenhuma,Nenhuma,
+2025-01-12,Expedição,Ana Costa,Etiquetagem de lote,Rastreabilidade,Completa,Sim,"OK",Nenhuma,Nenhuma,
+2025-01-13,Produção,Maria Silva,Limpeza de tanque,Higiene,Aprovada,Sim,"OK",Nenhuma,Nenhuma,
+2025-01-14,Embalagem,Carlos Pereira,Integridade do invólucro,Embalagem,Boa,Sim,"OK",Nenhuma,Nenhuma

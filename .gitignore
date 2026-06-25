@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+virtualenv/
+.env
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Outputs
+outputs/relatorios/*.txt
+outputs/relatorios/*.pdf
+outputs/graficos/*.png
+
+# Modelos locais
+models/
+
+# Logs
+logs/
+*.log
+
+# Editor
+.DS_Store
