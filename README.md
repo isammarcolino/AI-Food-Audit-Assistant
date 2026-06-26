@@ -1,3 +1,17 @@
+# 👩‍💼 Sobre a colaboração
+
+Este projeto é resultado de uma colaboração entre duas áreas complementares.
+
+### Especialista de Negócio
+
+Responsável pela concepção dos cenários de auditoria, definição dos requisitos funcionais, validação dos indicadores de qualidade e revisão técnica dos resultados gerados pela IA.
+
+### Engenharia de IA
+
+Responsável pela arquitetura da solução, desenvolvimento do pipeline de dados, integração com modelos de linguagem (LLMs), implementação da aplicação e construção do dashboard analítico.
+
+Essa colaboração demonstra como profissionais de negócio e especialistas em IA podem desenvolver soluções de alto valor para apoiar processos industriais e de qualidade.
+
 # 🍽️ AI Food Audit Assistant
 
 > Um assistente inteligente para auditorias de Qualidade e Segurança de Alimentos utilizando Inteligência Artificial Local (Qwen GGUF) executando no Google Colab.
