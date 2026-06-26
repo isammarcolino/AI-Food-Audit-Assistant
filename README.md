@@ -314,3 +314,5 @@ Algumas possibilidades:
 Este projeto foi criado para demonstrar a integração entre **Ciência de Dados**, **Engenharia de IA** e **Modelos de Linguagem**, mostrando como um LLM pode atuar como um especialista capaz de interpretar resultados analíticos e gerar recomendações de alto valor para processos de auditoria da qualidade.
 
 Ele serve como uma base para aplicações corporativas de inspeção, conformidade e suporte à decisão, podendo ser expandido para cenários reais em ambientes industriais.
+
+<img width="1052" height="547" alt="image" src="https://github.com/user-attachments/assets/fd6bf6c0-85c2-4dc8-885b-7f6657264900" />
