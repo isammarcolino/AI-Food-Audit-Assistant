@@ -26,8 +26,8 @@ virtualenv/
 .env
 
 # Jupyter
-.ipynb_checkpoints
-*.ipynb
+#.ipynb_checkpoints
+#*.ipynb
 
 # Outputs
 outputs/relatorios/*.txt
