@@ -1,0 +1,6 @@
+Data,Setor,Auditor,Item auditado,Categoria,Conforme,Observação,Ação corretiva,Responsável,Prazo
+2026-06-01,Recepção,Ana,Higiene das mãos,Higiene,Não,Falta de lavagem adequada,Reforçar treinamento,João,2026-06-05
+2026-06-02,Produção,Carlos,Temperatura ambiente,Processo,Sim,Ok,,Maria,2026-06-10
+2026-06-03,Expedição,Ana,Embalagem íntegra,Embalagem,Não,Embalagem danificada,Substituir material,Pedro,2026-06-06
+2026-06-04,Produção,Carlos,Controle de pragas,Infraestrutura,Não,Presença de insetos,Acionar dedetização,Maria,2026-06-07
+2026-06-05,Embalagem,Ana,Rotulagem correta,Rotulagem,Sim,Ok,,João,2026-06-11

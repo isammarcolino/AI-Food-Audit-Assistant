@@ -1,50 +1,42 @@
-"""
-Templates de prompts para o modelo de IA local.
-Usa Jinja2-style para injeção de dados.
-"""
+SYSTEM_PROMPT = """Você é um auditor especialista em qualidade e segurança de alimentos.
+Analise os dados com objetividade, indique riscos, priorize ações e responda em português."""
 
-EXECUTIVE_SUMMARY_PROMPT = """
-Você é um especialista em Qualidade e Segurança de Alimentos.
-Analise os indicadores abaixo e gere um resumo executivo claro, técnico e direto.
+EXEC_SUMMARY_PROMPT = """Gere um resumo executivo em até 120 palavras com base nos indicadores abaixo.
 
-INDICADORES:
-- Conformidade Geral: {{ conformidade }}%
-- Total de Não Conformidades: {{ nc_count }}
-- Setor com mais NC: {{ top_sector }}
-- Categoria com mais falhas: {{ top_category }}
-- Itens recorrentes: {{ recorrentes }}
+Conformidade geral: {conformidade}%
+Total de não conformidades: {nc_count}
+Setor com mais NC: {top_sector}
+Categoria com mais falhas: {top_category}
+Itens recorrentes: {recorrentes}
 
-Escreva em português, em até 150 palavras.
-Destaque riscos críticos e pontos positivos.
+Inclua riscos e uma leitura executiva do cenário.
 """
 
-TECHNICAL_ANALYSIS_PROMPT = """
-Com base nos dados de auditoria, faça uma análise técnica detalhada.
+TECH_PROMPT = """Gere uma análise técnica em até 180 palavras com foco em:
+- riscos críticos
+- provável causa raiz
+- ações imediatas
+- prevenção
 
-PRINCIPAIS NC CRÍTICAS:
-{{ critical_issues }}
-
-RECOMENDAÇÕES:
-- Ações imediatas
-- Treinamentos necessários
-- Melhorias estruturais
-
-PLANO DE AÇÃO:
-- Prioridades (1 a 3)
-- Prazos sugeridos
-- Responsáveis ideais
-
-Use linguagem técnica, mas clara. Máximo 300 palavras.
+Pontos críticos:
+{critical_issues}
 """
 
-QA_CHAT_PROMPT = """
-Você é um Auditor IA especialista em segurança de alimentos.
-Responda à pergunta com base nos dados fornecidos.
+ACTION_PROMPT = """Crie um plano de ação prático com prioridade 1, 2 e 3, em até 120 palavras.
 
-PERGUNTA: {{ pergunta }}
+Use como base:
+- Conformidade: {conformidade}%
+- Setor crítico: {top_sector}
+- Categoria crítica: {top_category}
+- Itens recorrentes: {recorrentes}
+"""
 
-DADOS:
-{{ contexto }}
+QA_CHAT_PROMPT = """Responda à pergunta usando somente o contexto da auditoria.
 
-Responda com clareza, em português, em até 100 palavras.
+Pergunta: {pergunta}
+
+Contexto:
+{contexto}
+
+Responda em português, de forma objetiva e útil, até 90 palavras.
 """

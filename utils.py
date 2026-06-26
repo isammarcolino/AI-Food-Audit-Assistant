@@ -1,56 +1,36 @@
-"""
-Utilitários reutilizáveis: logging, download, formatação, etc.
-"""
 import logging
-import requests
-import os
-from pathlib import Path
-from tqdm import tqdm
-from typing import Union
+from typing import Iterable
+import pandas as pd
+from config import LOGS_DIR
 
-# Configuração de logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("logs/app.log"),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+def setup_logger(name: str = "food_audit") -> logging.Logger:
+    logger = logging.getLogger(name)
+    if not logger.handlers:
+        logger.setLevel(logging.INFO)
+        fmt = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        sh = logging.StreamHandler()
+        sh.setFormatter(fmt)
+        logger.addHandler(sh)
+        LOGS_DIR.mkdir(parents=True, exist_ok=True)
+        fh = logging.FileHandler(LOGS_DIR / "app.log", encoding="utf-8")
+        fh.setFormatter(fmt)
+        logger.addHandler(fh)
+    return logger
 
-def setup_directories():
-    """Cria diretórios necessários se não existirem."""
-    for path in ["logs", "outputs/graficos", "outputs/relatorios", "models"]:
-        Path(path).mkdir(exist_ok=True)
+logger = setup_logger()
 
-def download_file(url: str, dest: Union[Path, str]) -> bool:
-    """
-    Baixa arquivo com barra de progresso.
-    Útil para modelos GGUF grandes.
-    """
-    dest = Path(dest)
-    if dest.exists():
-        logger.info(f"{dest.name} já existe. Pulando download.")
-        return True
+def ensure_columns(df: pd.DataFrame, cols: Iterable[str]) -> None:
+    missing = [c for c in cols if c not in df.columns]
+    if missing:
+        raise ValueError(f"Colunas obrigatórias ausentes: {missing}")
 
-    try:
-        logger.info(f"Baixando {url} -> {dest}")
-        response = requests.get(url, stream=True)
-        response.raise_for_status()
-        total_size = int(response.headers.get('content-length', 0))
+def normalize_text(series: pd.Series) -> pd.Series:
+    return series.astype(str).str.strip().str.replace(r"\s+", " ", regex=True).str.title()
 
-        with open(dest, 'wb') as f, tqdm(
-            desc=dest.name,
-            total=total_size,
-            unit='B',
-            unit_scale=True
-        ) as pbar:
-            for chunk in response.iterable:
-                f.write(chunk)
-                pbar.update(len(chunk))
-        logger.info("Download concluído.")
-        return True
-    except Exception as e:
-        logger.error(f"Erro no download: {e}")
-        return False
+def safe_dt(series: pd.Series) -> pd.Series:
+    return pd.to_datetime(series, errors="coerce", dayfirst=True)
+
+def topn(series: pd.Series, n: int = 5) -> dict:
+    if series.empty:
+        return {}
+    return series.value_counts().head(n).to_dict()
