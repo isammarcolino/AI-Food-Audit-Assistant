@@ -80,156 +80,141 @@ class FoodAuditAnalyzer:
     def chart_dashboard(self):
         import matplotlib.pyplot as plt
         from matplotlib.gridspec import GridSpec
+        from matplotlib.patches import FancyBboxPatch
         import pandas as pd
 
         plt.style.use("seaborn-v0_8-whitegrid")
 
-        fig = plt.figure(figsize=(10, 6), dpi=200)
+        fig = plt.figure(figsize=(13, 7), dpi=200)
         gs = GridSpec(
-            3,
-            4,
+            3, 4,
             figure=fig,
-            height_ratios=[1.2, 1.5, 1.6],
+            height_ratios=[1.0, 1.25, 1.35],
+            width_ratios=[1.15, 1.15, 1.15, 1.15],
             hspace=0.55,
-            wspace=0.40
+            wspace=0.35
         )
 
-        # ==========================================================
+        def kpi_card(ax, x, y, w, h, title, value, color="#1f77b4"):
+            ax.add_patch(
+                FancyBboxPatch(
+                    (x, y), w, h,
+                    boxstyle="round,pad=0.02,rounding_size=0.03",
+                    linewidth=1.0,
+                    edgecolor="#d0d7de",
+                    facecolor="white",
+                    transform=ax.transAxes
+                )
+            )
+            ax.text(x + 0.06, y + h - 0.20, title, transform=ax.transAxes,
+                    fontsize=9, fontweight="bold", va="top", color="#444")
+            ax.text(x + 0.06, y + 0.12, value, transform=ax.transAxes,
+                    fontsize=16, fontweight="bold", va="bottom", color=color)
+
+        # ----------------------------------------------------------
         # DONUT
-        # ==========================================================
-
+        # ----------------------------------------------------------
         ax_donut = fig.add_subplot(gs[0, 0])
-
-        conformidade = self.indicadores["conformidade"]
-        nao = 100 - conformidade
+        conformidade = float(self.indicadores["conformidade"])
+        nao = max(0.0, 100.0 - conformidade)
 
         ax_donut.pie(
             [conformidade, nao],
             startangle=90,
-            wedgeprops=dict(width=0.38),
-            autopct="%1.0f%%"
+            counterclock=False,
+            wedgeprops=dict(width=0.38, edgecolor="white"),
+            autopct=lambda p: f"{p:.0f}%" if p >= 5 else ""
         )
+        ax_donut.set_title("Conformidade", fontsize=11, pad=10)
+        ax_donut.set_aspect("equal")
 
-        ax_donut.set_title("Conformidade", fontsize=11)
-
-        # ==========================================================
-        # KPI
-        # ==========================================================
-
+        # ----------------------------------------------------------
+        # KPI CARDS
+        # ----------------------------------------------------------
         ax_kpi = fig.add_subplot(gs[0, 1:4])
         ax_kpi.axis("off")
 
-        texto = f"""
-    CONFORMIDADE
+        card_w = 0.23
+        gap = 0.02
+        y = 0.12
 
-    {self.indicadores['conformidade']} %
+        kpi_card(ax_kpi, 0.00, y, card_w, 0.68, "Conformidade", f"{conformidade:.1f}%")
+        kpi_card(ax_kpi, card_w + gap, y, card_w, 0.68, "NC", str(self.indicadores["nc_count"]), "#d62728")
+        kpi_card(ax_kpi, 2 * (card_w + gap), y, card_w, 0.68, "Setor Crítico", str(self.indicadores["top_sector"]), "#ff7f0e")
+        kpi_card(ax_kpi, 3 * (card_w + gap), y, card_w, 0.68, "Categoria Crítica", str(self.indicadores["top_category"]), "#9467bd")
 
-    Não Conformidades : {self.indicadores['nc_count']}
-
-    Setor Crítico     : {self.indicadores['top_sector']}
-
-    Categoria Crítica : {self.indicadores['top_category']}
-    """
-
-        ax_kpi.text(
-            0,
-            0.5,
-            texto,
-            fontsize=12,
-            family="monospace",
-            va="center"
-        )
-
-        # ==========================================================
+        # ----------------------------------------------------------
         # SETORES
-        # ==========================================================
-
+        # ----------------------------------------------------------
         ax_setor = fig.add_subplot(gs[1, :2])
-
         setores = pd.Series(self.indicadores["setor_nc"]).head(5)
 
         if not setores.empty:
-
-            ax_setor.barh(
-                setores.index.astype(str),
-                setores.values
-            )
-
+            ax_setor.barh(setores.index.astype(str), setores.values, height=0.55)
             ax_setor.invert_yaxis()
+            ax_setor.tick_params(axis="y", labelsize=9)
+            ax_setor.tick_params(axis="x", labelsize=8)
+            ax_setor.grid(axis="x", linestyle="--", alpha=0.25)
+        else:
+            ax_setor.text(0.5, 0.5, "Sem dados suficientes", ha="center", va="center")
 
-        ax_setor.set_title("Top Setores Críticos")
+        ax_setor.set_title("Top Setores Críticos", fontsize=11, pad=8)
+        ax_setor.set_xlabel("Quantidade")
+        ax_setor.spines["top"].set_visible(False)
+        ax_setor.spines["right"].set_visible(False)
 
-        # ==========================================================
+        # ----------------------------------------------------------
         # CATEGORIAS
-        # ==========================================================
-
+        # ----------------------------------------------------------
         ax_cat = fig.add_subplot(gs[1, 2:4])
-
         categorias = pd.Series(self.indicadores["categoria_nc"]).head(5)
 
         if not categorias.empty:
-
-            ax_cat.barh(
-                categorias.index.astype(str),
-                categorias.values
-            )
-
+            ax_cat.barh(categorias.index.astype(str), categorias.values, height=0.55)
             ax_cat.invert_yaxis()
+            ax_cat.tick_params(axis="y", labelsize=9)
+            ax_cat.tick_params(axis="x", labelsize=8)
+            ax_cat.grid(axis="x", linestyle="--", alpha=0.25)
+        else:
+            ax_cat.text(0.5, 0.5, "Sem dados suficientes", ha="center", va="center")
 
-        ax_cat.set_title("Categorias Críticas")
+        ax_cat.set_title("Categorias Críticas", fontsize=11, pad=8)
+        ax_cat.set_xlabel("Quantidade")
+        ax_cat.spines["top"].set_visible(False)
+        ax_cat.spines["right"].set_visible(False)
 
-        # ==========================================================
+        # ----------------------------------------------------------
         # EVOLUÇÃO
-        # ==========================================================
-
+        # ----------------------------------------------------------
         ax_line = fig.add_subplot(gs[2, :])
-
         evolucao = self.indicadores["evolucao"]
 
         if isinstance(evolucao, pd.DataFrame) and not evolucao.empty:
-
             ax_line.plot(
                 evolucao.index.astype(str),
                 evolucao["nc_mensal"],
                 linewidth=2,
-                marker="o"
+                marker="o",
+                markersize=5
             )
-
             ax_line.set_ylabel("NC")
-
+            ax_line.tick_params(axis="x", labelsize=8)
+            ax_line.tick_params(axis="y", labelsize=8)
+            ax_line.grid(True, axis="y", linestyle="--", alpha=0.25)
         else:
+            ax_line.text(0.5, 0.5, "Sem dados suficientes", ha="center", va="center", fontsize=11)
+            ax_line.set_axis_off()
 
-            ax_line.text(
-                0.5,
-                0.5,
-                "Sem dados suficientes",
-                ha="center",
-                va="center",
-                fontsize=12
-            )
+        ax_line.set_title("Evolução das Não Conformidades", fontsize=11, pad=8)
+        ax_line.spines["top"].set_visible(False)
+        ax_line.spines["right"].set_visible(False)
 
-        ax_line.set_title("Evolução das Não Conformidades")
-
-        # ==========================================================
-
-        fig.suptitle(
-            "AI Food Audit Assistant",
-            fontsize=16,
-            fontweight="bold"
-        )
-
-        plt.tight_layout(rect=[0, 0, 1, 0.96])
+        fig.suptitle("AI Food Audit Assistant", fontsize=15, fontweight="bold", y=0.98)
+        plt.subplots_adjust(left=0.05, right=0.98, top=0.92, bottom=0.07)
 
         out = GRAPHICS_DIR / "dashboard_conformidade.png"
-
-        plt.savefig(
-            out,
-            dpi=250,
-            bbox_inches="tight"
-        )
-
+        plt.savefig(out, dpi=250, bbox_inches="tight")
         plt.close(fig)
-
         return out
 
     def executive_report(self) -> Path:
